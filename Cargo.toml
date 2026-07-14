@@ -1,0 +1,27 @@
+[package]
+name = "chrond"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.75"
+description = "A memory-safe cron daemon with missed-job catch-up, overlap control, queryable run history, built-in log rotation, and Prometheus/ntfy alerting."
+license = "MIT"
+repository = "https://github.com/JaydenCJ/chrond"
+keywords = ["cron", "scheduler", "daemon", "logrotate", "observability"]
+categories = ["command-line-utilities"]
+
+[dependencies]
+# Calendar math for cron schedule evaluation (local time handling).
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
+# Structured run records (JSONL history + state file).
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+# HTTPS client for ntfy push notifications (rustls, no OpenSSL).
+ureq = { version = "2", default-features = false, features = ["tls"] }
+
+[dev-dependencies]
+# Integration tests build schedule timestamps relative to the current time.
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
+
+[profile.release]
+strip = true
+lto = true
